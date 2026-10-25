@@ -98,7 +98,7 @@ prisma/
 - **Controller e Service:** separa a validacao e a resposta HTTP do acesso ao banco, mantendo o fluxo direto e simples. A escolha evita a complexidade adicional de UseCases/Arquitetura Limpa e e aderente a uma implementacao de 3-4 horas.
 - **Relatorio:** as agregacoes sao calculadas pelo Prisma no banco; quantidade total inclui todos os status, enquanto receita e ticket medio incluem somente vendas aprovadas.
 
-## Plano de execucao e commits
+## Plano de execucao
 
 ### Etapa 1 — Estrutura e banco de dados
 
@@ -112,13 +112,6 @@ npx prisma validate
 npx prisma migrate dev --name cria_tabela_venda
 ```
 
-Commit:
-
-```bash
-git add .gitignore package.json package-lock.json tsconfig.json prisma/schema.prisma src/banco/prisma.ts
-git commit -m "feat: cria estrutura e modelo de vendas"
-```
-
 ### Etapa 2 — Validacao e autenticacao do webhook
 
 Implementa a rota e o controlador do webhook com validacao Zod e verificacao do segredo.
@@ -128,13 +121,6 @@ Teste manual:
 ```bash
 curl -i http://localhost:3000/webhooks/vendas -H "Content-Type: application/json" -H "x-segredo-webhook: segredo-incorreto" -d '{}'
 curl -i http://localhost:3000/webhooks/vendas -H "Content-Type: application/json" -H "x-segredo-webhook: troque-por-um-segredo-forte" -d '{}'
-```
-
-Commit:
-
-```bash
-git add package.json package-lock.json src/controladores/venda.controlador.ts src/rotas/venda.rotas.ts
-git commit -m "feat: valida e autentica webhook de vendas"
 ```
 
 ### Etapa 3 — Persistencia idempotente
@@ -148,13 +134,6 @@ curl -i http://localhost:3000/webhooks/vendas -H "Content-Type: application/json
 curl -i http://localhost:3000/webhooks/vendas -H "Content-Type: application/json" -H "x-segredo-webhook: troque-por-um-segredo-forte" -d '{"idTransacao":"transacao-teste-1","status":"APROVADO","valor":149.90,"emailCliente":"cliente@exemplo.com"}'
 ```
 
-Commit:
-
-```bash
-git add src/servicos/venda.servico.ts
-git commit -m "feat: registra vendas com idempotencia"
-```
-
 ### Etapa 4 — Relatorio e inicializacao da API
 
 Adiciona agregacoes do relatorio e inicializacao do servidor com validacao de ambiente e tratamento de erros.
@@ -166,13 +145,6 @@ curl -i http://localhost:3000/relatorios/vendas
 npm run compilar
 ```
 
-Commit:
-
-```bash
-git add src/aplicacao.ts src/servidor.ts
-git commit -m "feat: disponibiliza relatorio de vendas"
-```
-
 ### Etapa 5 — Container e documentacao
 
 Documenta configuracao, exemplos e decisoes tecnicas; adiciona os arquivos para ambiente e imagem Docker.
@@ -182,11 +154,4 @@ Teste manual:
 ```bash
 docker build -t api-vendas .
 docker run --rm -p 3000:3000 -e DATABASE_URL="postgresql://postgres:postgres@host.docker.internal:5432/vendas?schema=public" -e X_SEGREDO_WEBHOOK="troque-por-um-segredo-forte" api-vendas
-```
-
-Commit:
-
-```bash
-git add Dockerfile .env.example README.md
-git commit -m "docs: documenta execucao e uso da api de vendas"
 ```
