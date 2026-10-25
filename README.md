@@ -13,10 +13,10 @@ API em Node.js, TypeScript, Express e Prisma para receber webhooks de vendas com
 1. Instale as dependencias:
 
    ```bash
-   npm install
+   npm ci
    ```
 
-2. Copie `.env.example` para `.env` e configure `DATABASE_URL`, `X_SEGREDO_WEBHOOK` e, se necessario, `PORTA`.
+2. Copie `.env.example` para `.env` e configure `DATABASE_URL`, `DIRECT_URL`, `X_SEGREDO_WEBHOOK` e, se necessario, `PORTA`. `DIRECT_URL` pode usar a mesma URL PostgreSQL de `DATABASE_URL`.
 
 3. Crie o banco PostgreSQL indicado em `DATABASE_URL` e aplique a migracao inicial:
 
@@ -37,7 +37,7 @@ API em Node.js, TypeScript, Express e Prisma para receber webhooks de vendas com
    npm run iniciar
    ```
 
-Para iniciar pelo Docker, compile a imagem com `docker build -t api-vendas .` e execute-a informando `DATABASE_URL` e `X_SEGREDO_WEBHOOK` no ambiente do container.
+Para iniciar pelo Docker, compile a imagem com `docker build -t api-vendas .` e execute-a informando `DATABASE_URL`, `DIRECT_URL` e `X_SEGREDO_WEBHOOK` no ambiente do container.
 
 ## Endpoints
 
@@ -153,5 +153,5 @@ Teste manual:
 
 ```bash
 docker build -t api-vendas .
-docker run --rm -p 3000:3000 -e DATABASE_URL="postgresql://postgres:postgres@host.docker.internal:5432/vendas?schema=public" -e X_SEGREDO_WEBHOOK="troque-por-um-segredo-forte" api-vendas
+docker run --rm -p 3000:3000 -e DATABASE_URL="postgresql://postgres:postgres@host.docker.internal:5432/vendas?schema=public" -e DIRECT_URL="postgresql://postgres:postgres@host.docker.internal:5432/vendas?schema=public" -e X_SEGREDO_WEBHOOK="troque-por-um-segredo-forte" api-vendas
 ```
