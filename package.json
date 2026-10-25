@@ -1,0 +1,27 @@
+{
+  "name": "api-vendas",
+  "version": "1.0.0",
+  "private": true,
+  "description": "API para recebimento de webhooks e relatorios de vendas",
+  "main": "dist/servidor.js",
+  "scripts": {
+    "desenvolvimento": "tsx watch src/servidor.ts",
+    "compilar": "prisma generate && tsc",
+    "iniciar": "node dist/servidor.js",
+    "banco:migrar": "prisma migrate dev",
+    "banco:gerar": "prisma generate"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.8.2",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.15.18",
+    "prisma": "^6.8.2",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3"
+  }
+}

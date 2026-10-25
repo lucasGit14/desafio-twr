@@ -1,0 +1,24 @@
+generator cliente {
+  provider = "prisma-client-js"
+}
+
+datasource banco {
+ provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum StatusVenda {
+  APROVADO
+  REEMBOLSADO
+  RECUSADO
+}
+
+model Venda {
+  id           String      @id @default(uuid()) @banco.Uuid
+  idTransacao  String      @unique
+  status       StatusVenda
+  valor        Decimal     @banco.Decimal(12, 2)
+  emailCliente String
+  dataCriacao  DateTime    @default(now())
+}
